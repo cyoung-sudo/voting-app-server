@@ -19,7 +19,7 @@ app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
-  cookie: { maxAge: 60000 } // 1min
+  cookie: { maxAge: 60000 * 10 } // 10min
 }));
 // Passport
 app.use(passport.initialize());
@@ -28,6 +28,7 @@ app.use(passport.session());
 //----- Routes
 app.use(require("./routes/auth"));
 app.use(require("./routes/user"));
+app.use(require("./routes/poll"));
  
 //----- Connection
 app.listen(port, () => {

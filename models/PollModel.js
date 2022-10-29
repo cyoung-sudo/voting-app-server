@@ -1,0 +1,31 @@
+var mongoose = require("mongoose");
+
+var PollSchema = new mongoose.Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true
+  },
+  topic: {
+    type: String,
+    required: true
+  },
+  options: {
+    type: [{
+      option: String,
+      votes: Number
+    }],
+    required: true
+  },
+  expiration: {
+    type: Date,
+    required: true
+  },
+  expired: {
+    type: Boolean,
+    required: true,
+    default: false
+  }
+}, { timestamps: true });
+
+module.exports = mongoose.model("Poll", PollSchema);
