@@ -12,7 +12,7 @@ var PollSchema = new mongoose.Schema({
   },
   options: {
     type: [{
-      option: String,
+      value: String,
       votes: Number
     }],
     required: true

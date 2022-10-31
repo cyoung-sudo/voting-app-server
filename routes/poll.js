@@ -38,8 +38,59 @@ pollRoutes.route("/api/polls")
   .catch(err => console.log(err));
 });
 
+//----- Return specified poll
+pollRoutes.post("/api/poll", (req, res) => {
+  Poll.findById(req.body.id)
+  .then(poll => {
+    if(poll) {
+      res.json({
+        success: true,
+        poll
+      });
+    } else {
+      res.json({
+        success: false,
+        message: "Poll not found"
+      });
+    }
+  })
+  .catch(err => console.log(err));
+});
+
+//----- Update poll votes
+pollRoutes.put("/api/poll/vote", (req, res) => {
+  Poll.findById(req.body.id)
+  .then(poll => {
+    // Copy options
+    let options = [...poll.options];
+
+    // Update vote
+    let updatedOptions = options.map(option => {
+      if(option.value === req.body.choice) {
+        return {
+          value: option.value,
+          votes: (option.votes + 1)
+        };
+      } else {
+        return option;
+      }
+    });
+
+    // Save update
+    return Poll.findByIdAndUpdate(req.body.id, {
+      options: updatedOptions
+    }, {
+      new: true
+    });
+  })
+  .then(updatedPoll => {
+    res.json({ success: true })
+  })
+  .catch(err => console.log(err));
+});
+
 //----- Return all polls for given user
-pollRoutes.post("/api/polls/user", (req,res) => {
+pollRoutes.post("/api/polls/user", (req, res) => {
   Poll.find({ userId: req.body.id })
   .then(userPolls => {
     res.json({

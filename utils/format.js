@@ -3,7 +3,7 @@ const formatOptions = (options) => {
   let optionsArr = options.split(",");
   let result = optionsArr.map(option => {
     return {
-      option,
+      value: option,
       votes: 0
     };
   });
