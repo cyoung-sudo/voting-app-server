@@ -89,6 +89,24 @@ pollRoutes.put("/api/poll/vote", (req, res) => {
   .catch(err => console.log(err));
 });
 
+//----- Add new option for given poll
+pollRoutes.put("/api/polls/option", (req, res) => {
+  Poll.findByIdAndUpdate(req.body.id, {
+    $push: {
+      options: {
+        value: req.body.newOption,
+        votes: 0
+      }
+    }
+  }, {
+    new: true
+  })
+  .then(updatedPoll => {
+    res.json({ success: true })
+  })
+  .catch(err => console.log(err));
+});
+
 //----- Return all polls for given user
 pollRoutes.post("/api/polls/user", (req, res) => {
   Poll.find({ userId: req.body.id })
