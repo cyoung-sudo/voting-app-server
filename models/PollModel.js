@@ -17,11 +17,7 @@ var PollSchema = new mongoose.Schema({
     }],
     required: true
   },
-  expiration: {
-    type: Date,
-    required: true
-  },
-  expired: {
+  closed: {
     type: Boolean,
     required: true,
     default: false

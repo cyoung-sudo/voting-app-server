@@ -27,7 +27,6 @@ pollRoutes.route("/api/polls")
     userId: req.user._id,
     topic: req.body.topic,
     options: formattedOptions,
-    expiration: req.body.expiration
   })
 
   // Save new poll
@@ -119,6 +118,20 @@ pollRoutes.put("/api/poll/option", (req, res) => {
         votes: 0
       }
     }
+  }, {
+    new: true
+  })
+  .then(updatedPoll => {
+    res.json({ success: true })
+  })
+  .catch(err => console.log(err));
+});
+
+//----- Change poll status
+pollRoutes.put("/api/poll/status", (req, res) => {
+  let updatedClosed = (req.body.status === "close" ? true : false);
+  Poll.findByIdAndUpdate(req.body.id, {
+    closed: updatedClosed
   }, {
     new: true
   })
