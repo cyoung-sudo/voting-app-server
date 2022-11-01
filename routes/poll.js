@@ -38,8 +38,21 @@ pollRoutes.route("/api/polls")
   .catch(err => console.log(err));
 });
 
+//----- Return all polls for given user
+pollRoutes.post("/api/polls/user", (req, res) => {
+  Poll.find({ userId: req.body.id })
+  .then(userPolls => {
+    res.json({
+      success: true,
+      polls: userPolls
+    })
+  })
+  .catch(err => console.log(err));
+});
+
+pollRoutes.route("/api/poll")
 //----- Return specified poll
-pollRoutes.post("/api/poll", (req, res) => {
+.post((req, res) => {
   Poll.findById(req.body.id)
   .then(poll => {
     if(poll) {
@@ -55,7 +68,15 @@ pollRoutes.post("/api/poll", (req, res) => {
     }
   })
   .catch(err => console.log(err));
-});
+})
+//----- Delete specified poll
+.delete((req, res) => {
+  Poll.findByIdAndDelete(req.body.id)
+  .then(deletedPoll => {
+    res.json({ success: true });
+  })
+  .catch(err => console.log(err));
+}); 
 
 //----- Update poll votes
 pollRoutes.put("/api/poll/vote", (req, res) => {
@@ -90,7 +111,7 @@ pollRoutes.put("/api/poll/vote", (req, res) => {
 });
 
 //----- Add new option for given poll
-pollRoutes.put("/api/polls/option", (req, res) => {
+pollRoutes.put("/api/poll/option", (req, res) => {
   Poll.findByIdAndUpdate(req.body.id, {
     $push: {
       options: {
@@ -103,18 +124,6 @@ pollRoutes.put("/api/polls/option", (req, res) => {
   })
   .then(updatedPoll => {
     res.json({ success: true })
-  })
-  .catch(err => console.log(err));
-});
-
-//----- Return all polls for given user
-pollRoutes.post("/api/polls/user", (req, res) => {
-  Poll.find({ userId: req.body.id })
-  .then(userPolls => {
-    res.json({
-      success: true,
-      polls: userPolls
-    })
   })
   .catch(err => console.log(err));
 });
