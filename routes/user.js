@@ -16,8 +16,8 @@ userRoutes.route("/api/users")
   .catch(err => console.log(err));
 });
 
-//----- Return specific user
 userRoutes.route("/api/user")
+//----- Return specific user
 .post((req, res) => {
   User.findById(req.body.id)
   .then(user => {
@@ -25,6 +25,14 @@ userRoutes.route("/api/user")
       success: true,
       user
     })
+  })
+  .catch(err => console.log(err));
+})
+//----- Delete specific user
+.delete((req, res) => {
+  User.findByIdAndDelete(req.user._id)
+  .then(deletedUser => {
+    res.json({ success: true });
   })
   .catch(err => console.log(err));
 });
