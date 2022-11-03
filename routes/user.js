@@ -22,10 +22,17 @@ userRoutes.route("/api/user")
 .post((req, res) => {
   User.findById(req.body.id)
   .then(user => {
-    res.json({
-      success: true,
-      user
-    })
+    if(user) {
+      res.json({
+        success: true,
+        user
+      });
+    } else {
+      res.json({
+        success: false,
+        message: "User not found"
+      })
+    }
   })
   .catch(err => console.log(err));
 })
