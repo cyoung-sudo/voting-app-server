@@ -2,6 +2,7 @@ const express = require("express");
 const userRoutes = express.Router();
 // Models
 const User = require("../models/UserModel");
+const Poll = require("../models/PollModel");
 
 //----- Return all users
 userRoutes.route("/api/users")
@@ -28,10 +29,13 @@ userRoutes.route("/api/user")
   })
   .catch(err => console.log(err));
 })
-//----- Delete specific user
+//----- Delete specific user & related polls
 .delete((req, res) => {
   User.findByIdAndDelete(req.user._id)
   .then(deletedUser => {
+    return Poll.deleteMany({ userId: deletedUser._id });
+  })
+  .then(deleteCount => {
     res.json({ success: true });
   })
   .catch(err => console.log(err));
