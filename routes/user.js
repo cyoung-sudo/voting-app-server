@@ -38,14 +38,22 @@ userRoutes.route("/api/user")
 })
 //----- Delete specific user & related polls
 .delete((req, res) => {
-  User.findByIdAndDelete(req.user._id)
-  .then(deletedUser => {
-    return Poll.deleteMany({ userId: deletedUser._id });
-  })
-  .then(deleteCount => {
-    res.json({ success: true });
-  })
-  .catch(err => console.log(err));
+  // Check for valid session
+  if(req.user) {
+    User.findByIdAndDelete(req.user._id)
+    .then(deletedUser => {
+      return Poll.deleteMany({ userId: deletedUser._id });
+    })
+    .then(deleteCount => {
+      res.json({ success: true });
+    })
+    .catch(err => console.log(err));
+  } else {
+    res.json({
+      success: false,
+      message: "Session has expired"
+    })
+  }
 });
 
 module.exports = userRoutes;
