@@ -11,7 +11,7 @@ userRoutes.route("/api/users")
   .then(users => {
     res.json({
       success: true,
-      users
+      users: users.reverse()
     })
   })
   .catch(err => console.log(err));

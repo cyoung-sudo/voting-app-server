@@ -12,7 +12,7 @@ pollRoutes.route("/api/polls")
   .then(polls => {
     res.json({
       success: true,
-      polls
+      polls: polls.reverse()
     })
   })
   .catch(err => console.log(err));
@@ -51,7 +51,7 @@ pollRoutes.post("/api/polls/user", (req, res) => {
   .then(userPolls => {
     res.json({
       success: true,
-      polls: userPolls
+      polls: userPolls.reverse()
     })
   })
   .catch(err => console.log(err));
