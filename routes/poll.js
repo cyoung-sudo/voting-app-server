@@ -97,30 +97,39 @@ pollRoutes.route("/api/poll")
 pollRoutes.put("/api/poll/vote", (req, res) => {
   Poll.findById(req.body.id)
   .then(poll => {
-    // Copy options
-    let options = [...poll.options];
+    // Check if poll is closed
+    if(poll.closed) {
+      res.json({ 
+        success: false,
+        message: "Poll has closed"
+      })
+    } else {
+      // Copy options
+      let options = [...poll.options];
 
-    // Update vote
-    let updatedOptions = options.map(option => {
-      if(option.value === req.body.choice) {
-        return {
-          value: option.value,
-          votes: (option.votes + 1)
-        };
-      } else {
-        return option;
-      }
-    });
+      // Update vote
+      let updatedOptions = options.map(option => {
+        if(option.value === req.body.choice) {
+          return {
+            value: option.value,
+            votes: (option.votes + 1)
+          };
+        } else {
+          return option;
+        }
+      });
 
-    // Save update
-    return Poll.findByIdAndUpdate(req.body.id, {
-      options: updatedOptions
-    }, {
-      new: true
-    });
-  })
-  .then(updatedPoll => {
-    res.json({ success: true })
+      // Save update
+      Poll.findByIdAndUpdate(req.body.id, {
+        options: updatedOptions
+      }, {
+        new: true
+      })  
+      .then(updatedPoll => {
+        res.json({ success: true })
+      })
+      .catch(err => console.log(err));
+    }
   })
   .catch(err => console.log(err));
 });
