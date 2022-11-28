@@ -4,6 +4,7 @@ const app = express();
 const cors = require("cors");
 require("dotenv").config({ path: "./config.env" });
 const port = process.env.PORT || 5000;
+const helmet = require("helmet");
 const db = require("./db/conn");
 // Session
 const session = require("express-session");
@@ -14,6 +15,7 @@ require("./config/passportConfig");
 //----- Middleware
 app.use(cors());
 app.use(express.json());
+app.use(helmet());
 // Session (needs to be above passport)
 app.use(session({
   secret: process.env.SESSION_SECRET,
