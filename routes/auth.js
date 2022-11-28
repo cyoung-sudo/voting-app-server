@@ -8,7 +8,7 @@ const passport = require("passport");
 const bcrypt = require("bcryptjs");
 
 //----- Register new user
-authRoutes.post("/api/auth/signup", async (req, res) => {
+authRoutes.post("/api/auth/signup", (req, res) => {
   // Encrypt password
   bcrypt.genSalt(10, (err, salt) => {
     bcrypt.hash(req.body.password, salt, (err, hash) => {
@@ -71,7 +71,7 @@ authRoutes.post("/api/auth/logout", (req, res) => {
 });
 
 //----- Return session status
-authRoutes.get("/api/auth/sessionStatus", (req, res) => {
+authRoutes.get("/api/auth/getUser", (req, res) => {
   // Check for valid session
   if(req.user) {
     res.json({
